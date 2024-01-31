@@ -11,7 +11,10 @@ public class playerController : MonoBehaviour
     private float steerInput;
     [SerializeField] private float currentSpeed;
     [SerializeField] private float currentSteer;
-
+    [SerializeField] private bool grounded = false;
+    [SerializeField] private float gravity;
+    private float fallSpeed;
+    [SerializeField] private float maxFallSpeed;
     
 
     // Start is called before the first frame update
@@ -26,17 +29,18 @@ public class playerController : MonoBehaviour
         accelerateInput = Input.GetAxis("Vertical");
         steerInput = Input.GetAxis("Horizontal");
 
+
         if((accelerateInput != 0) && (currentSpeed <= maxSpeed))
         {
             currentSpeed += accelerateInput * 0.01f;
         }
         else if( currentSpeed < 0)
         {
-            currentSpeed += 0.001f;
+            currentSpeed += 0.01f;
         }
         else if (currentSpeed > 0)
         {
-            currentSpeed -= 0.001f;
+            currentSpeed -= 0.01f;
         }
         currentSteer = steerInput * 100;
         transform.Translate(Vector3.forward * Time.deltaTime * currentSpeed);
@@ -47,6 +51,18 @@ public class playerController : MonoBehaviour
         if (currentSpeed > 0 && accelerateInput < 0)
         {
             currentSpeed -= 0.1f;
+        }
+
+        if (Physics.Raycast(transform.position, Vector3.down, 0.5f))
+        {
+            grounded = true;
+            fallSpeed = 0;
+        }
+        else
+        {
+            grounded = false;
+            fallSpeed += gravity;
+            transform.Translate(Vector3.down * Time.deltaTime * fallSpeed, Space.World);
         }
     }
 }
