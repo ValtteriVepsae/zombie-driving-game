@@ -9,6 +9,7 @@ public class playerController : MonoBehaviour
     [SerializeField] private float maxTurn;
     private float accelerateInput;
     private float steerInput;
+    private float handBrakeInput;
     [SerializeField] private float currentSpeed;
     [SerializeField] private float currentSteer;
     [SerializeField] private bool grounded = false;
@@ -30,7 +31,7 @@ public class playerController : MonoBehaviour
         steerInput = Input.GetAxis("Horizontal");
 
         //Check if accelerator is being pressed and if car is moving slower than maxSpeed
-        if((accelerateInput != 0) && (currentSpeed <= maxSpeed))
+        if(accelerateInput != 0 && currentSpeed <= maxSpeed)
         {
             //Increase the car speed towards the pressed direction
             currentSpeed += accelerateInput * 0.01f;
@@ -57,18 +58,21 @@ public class playerController : MonoBehaviour
         transform.Translate(Vector3.forward * Time.deltaTime * currentSpeed);
 
         //Make the current steering angle relative to the input and current speed
-        currentSteer = steerInput * currentSpeed * 10 - (currentSpeed * 0.9f);
+        //currentSteer = steerInput * currentSpeed * 10 - (currentSpeed * 0.9f);
+
+        currentSteer = steerInput * 50;
 
         if (steerInput == 0)
         {
             currentSteer = 0;
         }
         //Check if car is moving
-        if (currentSpeed > 1 || currentSpeed < -1)
+        if (currentSpeed > 0.1f || currentSpeed < -0.1f)
         {
             //Turn the car towards the steer direction
             transform.Rotate(Vector3.up * Time.deltaTime * currentSteer);
         }
+        
         if (currentSpeed > 0 && accelerateInput < 0)
         {
             currentSpeed -= 0.1f;
