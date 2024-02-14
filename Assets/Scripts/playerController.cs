@@ -4,31 +4,43 @@ using UnityEngine;
 
 public class playerController : MonoBehaviour
 {
-
+    [SerializeField] private GameObject weapon;
     [SerializeField] private float maxSpeed;
     [SerializeField] private float maxTurn;
     private float accelerateInput;
     private float steerInput;
     private float handBrakeInput;
+    private bool fireInput;
     [SerializeField] public float currentSpeed;
     [SerializeField] private float currentSteer;
     [SerializeField] private bool grounded = false;
     [SerializeField] private float gravity;
     private float fallSpeed;
     [SerializeField] private float maxFallSpeed;
+    public weaponFire weaponFire;
     
 
     // Start is called before the first frame update
     void Start()
     {
-
+        if (weapon != null)
+        {
+            Instantiate(weapon, transform.position, transform.rotation, this.transform);
+            weaponFire = weapon.GetComponent<weaponFire>();
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
+        fireInput = Input.GetKeyDown(KeyCode.E);
         accelerateInput = Input.GetAxis("Vertical");
         steerInput = Input.GetAxis("Horizontal");
+
+        if(fireInput)
+        {
+            weaponFire.Fire();
+        }
 
         //Check if accelerator is being pressed and if car is moving slower than maxSpeed
         if(accelerateInput != 0 && currentSpeed <= maxSpeed)
