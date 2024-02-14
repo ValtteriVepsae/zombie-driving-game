@@ -10,7 +10,7 @@ public class playerController : MonoBehaviour
     private float accelerateInput;
     private float steerInput;
     private float handBrakeInput;
-    [SerializeField] private float currentSpeed;
+    [SerializeField] public float currentSpeed;
     [SerializeField] private float currentSteer;
     [SerializeField] private bool grounded = false;
     [SerializeField] private float gravity;
