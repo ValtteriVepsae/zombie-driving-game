@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 684033831154917981}
   - component: {fileID: 3358236633211491991}
   - component: {fileID: 8544902256778004862}
-  - component: {fileID: 2658014218485698729}
   - component: {fileID: 7338571463800910527}
   - component: {fileID: 6830797716254956837}
+  - component: {fileID: 8356136899350605261}
   m_Layer: 0
   m_Name: zombie_start
   m_TagString: Enemy
@@ -95,28 +95,14 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3862441536099317570}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 50
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
+  m_IsKinematic: 1
+  m_Interpolate: 1
   m_Constraints: 112
-  m_CollisionDetection: 1
---- !u!136 &2658014218485698729
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3862441536099317570}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  m_Radius: 0.5
-  m_Height: 1.8881974
-  m_Direction: 1
-  m_Center: {x: -0.037860442, y: 0.9504659, z: 0.0029048026}
+  m_CollisionDetection: 2
 --- !u!64 &7338571463800910527
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -145,7 +131,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grounded: 0
   gravity: 1
+  health: 100
+  despawnTime: 180
   aliveMaterial: {fileID: 2100000, guid: 199036558d5c56f4da8af8eeaed122e3, type: 2}
   deadMaterial: {fileID: 2100000, guid: 51952c4544199104a9d21c54f8fadd51, type: 2}
   rb: {fileID: 8544902256778004862}
-  player: {fileID: 8674927504522773078, guid: 8cd560a806042d3409f6261b39d185e2, type: 3}
+  hitEffect: {fileID: 7660983100342263737, guid: 20f13d794ef3e1c4f86a214751f92287, type: 3}
+  deathEffect: {fileID: 1514697598456282765, guid: 952422cb7a858e440a65b8b7fa276c98, type: 3}
+--- !u!65 &8356136899350605261
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3862441536099317570}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Size: {x: 0.3178509, y: 1.8881974, z: 1.7081227}
+  m_Center: {x: -0.03786044, y: 0.9504659, z: 0.014283925}
