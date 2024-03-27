@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class enemyController : MonoBehaviour
 {
@@ -10,18 +12,30 @@ public class enemyController : MonoBehaviour
     [SerializeField] private bool grounded = false;
     [SerializeField] private float gravity;
     private float fallSpeed;
-    [SerializeField] private float health = 5;
+    [SerializeField] private float health;
     bool hasCollided = false;
+    float deadTime;
+    [SerializeField] float despawnTime;
+
     [SerializeField] Material aliveMaterial;
     [SerializeField] Material deadMaterial;
     [SerializeField] private Rigidbody rb;
+    [SerializeField] private ParticleSystem hitEffect;
+    [SerializeField] private ParticleSystem deathEffect;
     private GameObject player;
-    public playerController cs;
-    // Start is called before the first frame update
+    private playerController playerController;
+    ProjectileController projectileController;
+    static float projectileDamage;
+    private float effectTimer = -1;
+    ContactPoint contactPoint;
+    Vector3 knockbackdirection;
+    private bool isResetting;
+
     void Start()
     {
         player = GameObject.Find("Car");
-        cs = player.GetComponent<playerController>();
+        playerController = player.GetComponent<playerController>();
+        deadTime = 0;
     }
 
     // Update is called once per frame
@@ -31,7 +45,7 @@ public class enemyController : MonoBehaviour
         {
             if (Physics.Raycast(transform.position, Vector3.down, 0.1f))
             {
-                //Íf yes, enemy won't fall
+                //If yes, enemy won't fall
                 grounded = true;
                 fallSpeed = 0;
             }
@@ -43,24 +57,83 @@ public class enemyController : MonoBehaviour
                 transform.Translate(Vector3.down * Time.deltaTime * fallSpeed, Space.World);
             }
         }
-        Debug.Log(health);
-        if (health <= 0)
+
+    }
+    void OnCollisionEnter(Collision _target)
+    {
+        if (_target.gameObject.tag.Equals("Player"))
         {
-            GetComponent<MeshRenderer>().material = deadMaterial;
+            if (_target.gameObject != null)
+            {
+                getHit(_target, _target.gameObject);
+            }
+            if (playerController.currentSpeed > 5)
+            {
+                health -= Mathf.Abs(playerController.currentSpeed) * 6;
+            }
+        }
+        if (_target.gameObject.tag.Equals("Projectile"))
+        {
+            getHit(_target, _target.gameObject);
+            projectileController = _target.gameObject.GetComponent<ProjectileController>();
+            projectileDamage = projectileController.damage;
+            health -= projectileDamage;
+            Destroy(_target.gameObject);
         }
     }
-    void OnCollisionEnter(Collision target)
+    private void FixedUpdate()
     {
-        if (target.gameObject.tag.Equals("Player"))
+        if (effectTimer >= 0 && effectTimer < 10)
         {
-            rb.freezeRotation = false;
-            rb.useGravity = true;
-            hasCollided = true;
-            if(cs.currentSpeed > 5)
-            {
-                health -= Mathf.Abs(cs.currentSpeed);
-            }
-
+            effectTimer++;
         }
+        else if (effectTimer >= 10)
+        {
+            hitEffect.Stop(true);
+        }
+        if (health <= 0)
+        {
+            if (GetComponent<MeshRenderer>().material != deadMaterial)
+            {
+                GetComponent<MeshRenderer>().material = deadMaterial;
+            }
+            deadTime++;
+        }
+        if (deadTime >= despawnTime)
+        {
+            Instantiate(deathEffect, transform.position, transform.rotation);
+            Destroy(gameObject);
+        }
+        if (isResetting && transform.rotation != Quaternion.identity && health > 0)
+        {
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.identity, 0.1f);           
+        }
+        else if (isResetting)
+        {
+            isResetting = false;
+        }
+    }
+
+    void getHit(Collision col, GameObject obj)
+    {
+        rb.freezeRotation = false;
+        rb.useGravity = true;
+        rb.isKinematic = false;
+        knockbackdirection = obj.transform.position - transform.position;
+        rb.AddForce(knockbackdirection * -100, ForceMode.Impulse);
+        hasCollided = true;
+        contactPoint = col.GetContact(0);
+        Instantiate(hitEffect, contactPoint.point, obj.transform.rotation);
+        hitEffect.Play(true);
+        effectTimer = 0;
+        StartCoroutine("wakeUpTimer");
+    }
+
+    IEnumerator wakeUpTimer()
+    {
+        yield return new WaitForSeconds(5);
+        isResetting = true;
+        rb.freezeRotation = true;
+        rb.isKinematic = true;
     }
 }

@@ -10,19 +10,20 @@ public class playerController : MonoBehaviour
     private float accelerateInput;
     private float steerInput;
     private float handBrakeInput;
-    private bool fireInput;
+    public bool fireInput;
     [SerializeField] public float currentSpeed;
     [SerializeField] private float currentSteer;
     [SerializeField] private bool grounded = false;
     [SerializeField] private float gravity;
     private float fallSpeed;
     [SerializeField] private float maxFallSpeed;
-    public weaponFire weaponFire;
+    private weaponFire weaponFire;
     
 
     // Start is called before the first frame update
     void Start()
     {
+        Cursor.lockState = CursorLockMode.Locked;
         if (weapon != null)
         {
             Instantiate(weapon, transform.position, transform.rotation, this.transform);
@@ -33,13 +34,13 @@ public class playerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        fireInput = Input.GetKeyDown(KeyCode.E);
+        fireInput = Input.GetMouseButton(0);
         accelerateInput = Input.GetAxis("Vertical");
         steerInput = Input.GetAxis("Horizontal");
 
         if(fireInput)
         {
-            weaponFire.Fire();
+            //weaponFire.Fire();
         }
 
         //Check if accelerator is being pressed and if car is moving slower than maxSpeed
@@ -72,7 +73,7 @@ public class playerController : MonoBehaviour
         //Make the current steering angle relative to the input and current speed
         //currentSteer = steerInput * currentSpeed * 10 - (currentSpeed * 0.9f);
 
-        currentSteer = steerInput * 50;
+        currentSteer = steerInput * 80;
 
         if (steerInput == 0)
         {
