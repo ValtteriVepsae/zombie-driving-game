@@ -6,6 +6,7 @@ using UnityEngine;
 public class enemySpawner : MonoBehaviour
 {
 
+
     [SerializeField] GameObject[] spawnPoints;
     [SerializeField] GameObject[] enemyList;
     [SerializeField] float interval;
@@ -15,8 +16,10 @@ public class enemySpawner : MonoBehaviour
     float step;
     int enemyCount;
 
+
     void FixedUpdate()
     {
+
         //Get current amount of enemies loaded in
         enemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
         //Check if it's time to spawn enemies and if there is space for them
@@ -36,5 +39,7 @@ public class enemySpawner : MonoBehaviour
         }
         //Increase spawn timer
         step++;
+
+        
     }
 }
