@@ -4,20 +4,25 @@ using UnityEngine;
 
 public class cameraController : MonoBehaviour
 {
+    [Header("Settings")]
+    [SerializeField] float sensitivity;
+    [SerializeField] float zoomedSensitivity;
+
+    private float cameraSpeed;
+    [SerializeField] private float cameraDistance;
+    [SerializeField] Camera cam;
     private float mouseX;
     private float mouseY;
-    [SerializeField] float sensitivity;
-    [SerializeField] float height;
-    GameObject pivotPoint;
-    [SerializeField] private Camera cam;
+    private bool zoomInput;
+    private GameObject pivotPoint;
     private GameObject aimPoint;
     private RaycastHit hit;
     private Vector3 aimPointOffset;
 
+
    // Start is called before the first frame update
     void Start()
     {
-
         aimPoint = GameObject.FindGameObjectWithTag("AimPoint");
         pivotPoint = GameObject.Find("Pivotpoint");
     }
@@ -26,9 +31,24 @@ public class cameraController : MonoBehaviour
     {
         mouseX = Input.GetAxis("Mouse X");
         mouseY = Input.GetAxis("Mouse Y");
+        zoomInput = Input.GetMouseButton(1);
         transform.LookAt(pivotPoint.transform);
-        transform.Translate(Vector3.up * -mouseY * sensitivity);
-        transform.Translate(Vector3.right * -mouseX * sensitivity);
+        transform.Translate(Vector3.up * -mouseY * cameraSpeed);
+        transform.Translate(Vector3.right * -mouseX * cameraSpeed);
+        if ((pivotPoint.transform.position - transform.position).magnitude > cameraDistance)
+        {
+            transform.Translate(new Vector3(0,0,1));
+        }
+        if(zoomInput)
+        {
+            cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, 50, 10*Time.deltaTime);
+            cameraSpeed = zoomedSensitivity;
+        }
+        else if (!zoomInput)
+        {
+            cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, 90, 10*Time.deltaTime);
+            cameraSpeed = sensitivity;
+        }
         Physics.Raycast(this.transform.position, pivotPoint.transform.position - this.transform.position);
         var ray = new Ray(this.transform.position, pivotPoint.transform.position - this.transform.position);
         Debug.DrawRay(this.transform.position, pivotPoint.transform.position - this.transform.position);

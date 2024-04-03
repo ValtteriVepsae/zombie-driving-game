@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class ProjectileController: MonoBehaviour
 {
+    [Header("settings")]
     [SerializeField] float speed;
-    [SerializeField] public float damage;
+    [SerializeField] public float damageMin;
+    [SerializeField] public float damageMax;
+    [SerializeField] public float knockback;
     [SerializeField] float lifetime;
     private Rigidbody rb;
     private float time;
@@ -14,6 +17,7 @@ public class ProjectileController: MonoBehaviour
     void Start()
     {
         rb = gameObject.GetComponent<Rigidbody>();
+        knockback = 20;
     }
 
     private void FixedUpdate()

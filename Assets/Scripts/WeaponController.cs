@@ -2,15 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class weaponFire : MonoBehaviour
+public class WeaponController : MonoBehaviour
 {
     private GameObject player;
     private playerController playerController;
     [SerializeField] GameObject projectile;
     private GameObject shootPoint;
     [SerializeField] float interval;
+    [SerializeField] float recoil;
     private float step;
     private GameObject aimPoint;
+    [SerializeField] ParticleSystem shootEffect;
     Vector3 direction;
 
 
@@ -19,6 +21,7 @@ public class weaponFire : MonoBehaviour
         player = GameObject.Find("Car");
         playerController = player.GetComponent<playerController>();
         aimPoint = GameObject.Find("AimPoint");
+        shootPoint = GameObject.Find("shootPoint");
     }
 
     public void FixedUpdate()
@@ -38,8 +41,10 @@ public class weaponFire : MonoBehaviour
     }
     public void Fire()
     {
-            shootPoint = GameObject.Find("shootPoint");
+            
             Instantiate(projectile, shootPoint.transform.position, shootPoint.transform.rotation);
-        }
+            Instantiate(shootEffect, shootPoint.transform.position, shootPoint.transform.rotation);
+        transform.Rotate(Vector3.right, -recoil);
     }
+}
 
