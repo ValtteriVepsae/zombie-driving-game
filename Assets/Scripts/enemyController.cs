@@ -1,22 +1,21 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Runtime.CompilerServices;
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public class enemyController : MonoBehaviour
 {
-
+    [Header("Status")]
     [SerializeField] private bool grounded = false;
     [SerializeField] private float gravity;
-    private float fallSpeed;
+
     [SerializeField] private float health;
     bool hasCollided = false;
     float deadTime;
     [SerializeField] float despawnTime;
+    public bool isDead;
+    private float fallSpeed;
+    private bool isResetting;
 
+    [Header("Effects")]
     [SerializeField] Material aliveMaterial;
     [SerializeField] Material deadMaterial;
     [SerializeField] private Rigidbody rb;
@@ -29,7 +28,9 @@ public class enemyController : MonoBehaviour
     private float effectTimer = -1;
     ContactPoint contactPoint;
     Vector3 knockbackdirection;
-    private bool isResetting;
+    
+
+
 
     void Start()
     {
@@ -65,7 +66,7 @@ public class enemyController : MonoBehaviour
         {
             if (_target.gameObject != null)
             {
-                getHit(_target, _target.gameObject);
+                GetHit(_target, _target.gameObject, playerController.currentSpeed*player.GetComponent<Rigidbody>().mass);
             }
             if (playerController.currentSpeed > 5)
             {
@@ -74,10 +75,12 @@ public class enemyController : MonoBehaviour
         }
         if (_target.gameObject.tag.Equals("Projectile"))
         {
-            getHit(_target, _target.gameObject);
+            
             projectileController = _target.gameObject.GetComponent<ProjectileController>();
-            projectileDamage = projectileController.damage;
+            GetHit(_target, _target.gameObject, projectileController.knockback);
+            projectileDamage = Random.Range(projectileController.damageMin, projectileController.damageMax);
             health -= projectileDamage;
+            Debug.Log("target received : " + projectileDamage);
             Destroy(_target.gameObject);
         }
     }
@@ -93,9 +96,10 @@ public class enemyController : MonoBehaviour
         }
         if (health <= 0)
         {
-            if (GetComponent<MeshRenderer>().material != deadMaterial)
+            if (!isDead)
             {
                 GetComponent<MeshRenderer>().material = deadMaterial;
+                isDead = true;
             }
             deadTime++;
         }
@@ -114,22 +118,22 @@ public class enemyController : MonoBehaviour
         }
     }
 
-    void getHit(Collision col, GameObject obj)
+    void GetHit(Collision col, GameObject obj, float force)
     {
         rb.freezeRotation = false;
         rb.useGravity = true;
         rb.isKinematic = false;
         knockbackdirection = obj.transform.position - transform.position;
-        rb.AddForce(knockbackdirection * -100, ForceMode.Impulse);
+        rb.AddForce(knockbackdirection * -force, ForceMode.Impulse);
         hasCollided = true;
         contactPoint = col.GetContact(0);
         Instantiate(hitEffect, contactPoint.point, obj.transform.rotation);
         hitEffect.Play(true);
         effectTimer = 0;
-        StartCoroutine("wakeUpTimer");
+        StartCoroutine("WakeUpTimer");
     }
 
-    IEnumerator wakeUpTimer()
+    IEnumerator WakeUpTimer()
     {
         yield return new WaitForSeconds(5);
         isResetting = true;

@@ -4,30 +4,36 @@ using UnityEngine;
 
 public class playerController : MonoBehaviour
 {
-    [SerializeField] private GameObject weapon;
+    [Header("Settings")]
     [SerializeField] private float maxSpeed;
     [SerializeField] private float maxTurn;
+    [SerializeField] private float maxFallSpeed;
+
+    [Header("Status")]
+    [SerializeField] public float currentSpeed;
+    [SerializeField] private float currentSteer;
+    [SerializeField] private bool grounded;
+    [SerializeField] private float gravity;
     private float accelerateInput;
     private float steerInput;
     private float handBrakeInput;
     public bool fireInput;
-    [SerializeField] public float currentSpeed;
-    [SerializeField] private float currentSteer;
-    [SerializeField] private bool grounded = false;
-    [SerializeField] private float gravity;
+
+    [Header("Prefabs")]
+    [SerializeField] private GameObject weapon;
     private float fallSpeed;
-    [SerializeField] private float maxFallSpeed;
-    private weaponFire weaponFire;
+    private WeaponController weaponFire;
     
 
     // Start is called before the first frame update
     void Start()
     {
+        grounded = false;
         Cursor.lockState = CursorLockMode.Locked;
         if (weapon != null)
         {
             Instantiate(weapon, transform.position, transform.rotation, this.transform);
-            weaponFire = weapon.GetComponent<weaponFire>();
+            weaponFire = weapon.GetComponent<WeaponController>();
         }
     }
 
@@ -40,7 +46,7 @@ public class playerController : MonoBehaviour
 
         if(fireInput)
         {
-            //weaponFire.Fire();
+            //WeaponController.Fire();
         }
 
         //Check if accelerator is being pressed and if car is moving slower than maxSpeed
