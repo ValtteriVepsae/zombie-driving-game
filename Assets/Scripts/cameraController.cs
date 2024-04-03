@@ -17,15 +17,18 @@ public class cameraController : MonoBehaviour
    // Start is called before the first frame update
     void Start()
     {
-
+        GetComponent<GameManager>();
         aimPoint = GameObject.FindGameObjectWithTag("AimPoint");
         pivotPoint = GameObject.Find("Pivotpoint");
     }
 
     private void Update()
     {
-        mouseX = Input.GetAxis("Mouse X");
-        mouseY = Input.GetAxis("Mouse Y");
+        if (GameManager.isGamePaused == false)
+        {
+            mouseX = Input.GetAxis("Mouse X");
+            mouseY = Input.GetAxis("Mouse Y");
+        }
         transform.LookAt(pivotPoint.transform);
         transform.Translate(Vector3.up * -mouseY * sensitivity);
         transform.Translate(Vector3.right * -mouseX * sensitivity);
