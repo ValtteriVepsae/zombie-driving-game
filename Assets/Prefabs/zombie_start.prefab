@@ -153,6 +153,7 @@ MonoBehaviour:
   gravity: 1
   health: 100
   despawnTime: 180
+  isDead: 0
   aliveMaterial: {fileID: 2100000, guid: 199036558d5c56f4da8af8eeaed122e3, type: 2}
   deadMaterial: {fileID: 2100000, guid: 51952c4544199104a9d21c54f8fadd51, type: 2}
   rb: {fileID: 8544902256778004862}

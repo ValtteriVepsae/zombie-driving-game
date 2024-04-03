@@ -58,7 +58,11 @@ public class enemyController : MonoBehaviour
                 transform.Translate(Vector3.down * Time.deltaTime * fallSpeed, Space.World);
             }
         }
-
+        if (!hasCollided)
+        {
+            transform.LookAt(player.transform.position);
+            transform.Translate(Vector3.forward * Time.deltaTime * 10);
+        }
     }
     void OnCollisionEnter(Collision _target)
     {
@@ -110,12 +114,15 @@ public class enemyController : MonoBehaviour
         }
         if (isResetting && transform.rotation != Quaternion.identity && health > 0)
         {
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.identity, 0.1f);           
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.identity, 0.1f);
+            transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x, 0, transform.position.z), 0.1f);
         }
         else if (isResetting)
         {
+            hasCollided = false;
             isResetting = false;
         }
+
     }
 
     void GetHit(Collision col, GameObject obj, float force)

@@ -14,6 +14,7 @@ public class playerController : MonoBehaviour
     [SerializeField] private float currentSteer;
     [SerializeField] private bool grounded;
     [SerializeField] private float gravity;
+    GameObject weaponPoint;
     private float accelerateInput;
     private float steerInput;
     private float handBrakeInput;
@@ -23,16 +24,18 @@ public class playerController : MonoBehaviour
     [SerializeField] private GameObject weapon;
     private float fallSpeed;
     private WeaponController weaponFire;
+    private enemyController enemyController;
     
 
     // Start is called before the first frame update
     void Start()
     {
+        weaponPoint = GameObject.Find("WeaponPoint");
         grounded = false;
         Cursor.lockState = CursorLockMode.Locked;
         if (weapon != null)
         {
-            Instantiate(weapon, transform.position, transform.rotation, this.transform);
+            Instantiate(weapon, weaponPoint.transform.position, transform.rotation, this.transform);
             weaponFire = weapon.GetComponent<WeaponController>();
         }
     }
@@ -112,4 +115,18 @@ public class playerController : MonoBehaviour
             transform.Translate(Vector3.down * Time.deltaTime * fallSpeed, Space.World);
         }
     }
+    
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag.Equals("Enemy") && currentSpeed > 7)
+        {
+            currentSpeed -= currentSpeed / 10;
+        }
+        if(collision.gameObject.tag.Equals("Obstacle") && currentSpeed > 0)
+        {
+            Debug.Log("obstacle");
+            currentSpeed = -1;
+        }
+    }
+    
 }

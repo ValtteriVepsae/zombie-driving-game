@@ -12,6 +12,7 @@ public class ProjectileController: MonoBehaviour
     [SerializeField] float lifetime;
     private Rigidbody rb;
     private float time;
+    [SerializeField] GameObject trail;
 
     // Start is called before the first frame update
     void Start()
@@ -27,5 +28,18 @@ public class ProjectileController: MonoBehaviour
         {
             Destroy(this.gameObject);
         }    
+    }
+
+    private void OnDestroy()
+    {
+        trail.transform.parent = null;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag.Equals("Ground") || collision.gameObject.tag.Equals("Obstacle"))
+        {
+            Destroy(gameObject);
+        }
     }
 }
