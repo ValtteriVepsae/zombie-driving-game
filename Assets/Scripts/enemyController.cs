@@ -58,11 +58,6 @@ public class enemyController : MonoBehaviour
                 transform.Translate(Vector3.down * Time.deltaTime * fallSpeed, Space.World);
             }
         }
-        if (!hasCollided)
-        {
-            transform.LookAt(player.transform.position);
-            transform.Translate(Vector3.forward * Time.deltaTime * 10);
-        }
     }
     void OnCollisionEnter(Collision _target)
     {

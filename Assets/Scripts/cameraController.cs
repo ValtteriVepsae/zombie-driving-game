@@ -34,6 +34,7 @@ public class cameraController : MonoBehaviour
         {
             mouseX = Input.GetAxis("Mouse X");
             mouseY = Input.GetAxis("Mouse Y");
+            zoomInput = Input.GetMouseButton(1);
         }
         transform.LookAt(pivotPoint.transform);
         transform.Translate(Vector3.up * -mouseY * cameraSpeed);

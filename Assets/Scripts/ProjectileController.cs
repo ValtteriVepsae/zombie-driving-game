@@ -32,7 +32,10 @@ public class ProjectileController: MonoBehaviour
 
     private void OnDestroy()
     {
-        trail.transform.parent = null;
+        if (trail != null)
+        {
+            trail.transform.parent = null;
+        }
     }
 
     private void OnCollisionEnter(Collision collision)

@@ -35,13 +35,13 @@ public class playerController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         if (weapon != null)
         {
-            Instantiate(weapon, weaponPoint.transform.position, transform.rotation, this.transform);
+            Instantiate(weapon, weaponPoint.transform.position, transform.rotation, transform);
             weaponFire = weapon.GetComponent<WeaponController>();
         }
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         fireInput = Input.GetMouseButton(0);
         accelerateInput = Input.GetAxis("Vertical");
@@ -56,7 +56,7 @@ public class playerController : MonoBehaviour
         if(accelerateInput != 0 && currentSpeed <= maxSpeed)
         {
             //Increase the car speed towards the pressed direction
-            currentSpeed += accelerateInput * 0.01f;
+            currentSpeed += accelerateInput * 0.1f;
         }
         //Check if accelerator is pressed and if car is moving backwards
         else if(accelerateInput == 0 && currentSpeed < 0)
