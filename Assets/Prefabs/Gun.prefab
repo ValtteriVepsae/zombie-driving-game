@@ -24,6 +24,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2780854381964976387}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.435863, y: 1.36, z: 7.323791}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -32,7 +33,6 @@ Transform:
   - {fileID: 2340762042285854405}
   - {fileID: 6138021476868328224}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8588119941890835569
 MonoBehaviour:
@@ -48,6 +48,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectile: {fileID: 7920256531776750927, guid: 14bc26c7daedf2a4984a7b9a3080f2d6, type: 3}
   interval: 5
+  recoil: 2
+  shootEffect: {fileID: 1514697598456282765, guid: 641a4cedb7ed7874da88d3339d4ad396, type: 3}
 --- !u!1 &4613916346574528731
 GameObject:
   m_ObjectHideFlags: 0
@@ -71,20 +73,20 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4613916346574528731}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.209, z: 3.33}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6680101122577950414}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2879691122384824622
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 2
+    serializedVersion: 3
     m_TransformParent: {fileID: 6680101122577950414}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: b025ad919886bcf428d4d1d845a8eed0, type: 3}
@@ -136,7 +138,9 @@ PrefabInstance:
       value: machinegun
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b025ad919886bcf428d4d1d845a8eed0, type: 3}
 --- !u!4 &2340762042285854405 stripped
 Transform:
