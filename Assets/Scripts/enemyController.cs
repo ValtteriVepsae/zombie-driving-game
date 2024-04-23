@@ -44,7 +44,7 @@ public class enemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (hasCollided == false)
+        /*if (hasCollided == false)
         {
             if (Physics.Raycast(transform.position, Vector3.down, 0.1f))
             {
@@ -59,13 +59,13 @@ public class enemyController : MonoBehaviour
                 fallSpeed += gravity;
                 transform.Translate(Vector3.down * Time.deltaTime * fallSpeed, Space.World);
             }
-        }
+        }*/
     }
     void OnCollisionEnter(Collision _target)
     {
         if (_target.gameObject.tag.Equals("Player"))
         {
-            if (_target.gameObject != null)
+            if (_target.gameObject != null && player.GetComponent<Rigidbody>())
             {
                 GetHit(_target, _target.gameObject, playerController.currentSpeed*player.GetComponent<Rigidbody>().mass);
             }
@@ -123,6 +123,26 @@ public class enemyController : MonoBehaviour
         {
             health -= 0.5f;
             StartCoroutine("fireStatusTimer");
+        }
+
+
+
+
+        if (hasCollided == false)
+        {
+            if (Physics.Raycast(transform.position, Vector3.down, 0.1f))
+            {
+                //If yes, enemy won't fall
+                grounded = true;
+                fallSpeed = 0;
+            }
+            else
+            {
+                //If no, enemy starts to fall with an increasing speed
+                grounded = false;
+                fallSpeed += gravity;
+                transform.Translate(Vector3.down * Time.deltaTime * fallSpeed, Space.World);
+            }
         }
     }
 
