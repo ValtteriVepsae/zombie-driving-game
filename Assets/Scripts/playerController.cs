@@ -4,35 +4,44 @@ using UnityEngine;
 
 public class playerController : MonoBehaviour
 {
-    [SerializeField] private GameObject weapon;
+    [Header("Settings")]
     [SerializeField] private float maxSpeed;
     [SerializeField] private float maxTurn;
+    [SerializeField] private float maxFallSpeed;
+
+    [Header("Status")]
+    [SerializeField] public float currentSpeed;
+    [SerializeField] private float currentSteer;
+    [SerializeField] private bool grounded;
+    [SerializeField] private float gravity;
+    GameObject weaponPoint;
     private float accelerateInput;
     private float steerInput;
     private float handBrakeInput;
     public bool fireInput;
-    [SerializeField] public float currentSpeed;
-    [SerializeField] private float currentSteer;
-    [SerializeField] private bool grounded = false;
-    [SerializeField] private float gravity;
+
+    [Header("Prefabs")]
+    [SerializeField] private GameObject weapon;
     private float fallSpeed;
-    [SerializeField] private float maxFallSpeed;
-    private weaponFire weaponFire;
+    private WeaponController weaponFire;
+    private enemyController enemyController;
     
 
     // Start is called before the first frame update
     void Start()
     {
+        weaponPoint = GameObject.Find("WeaponPoint");
+        grounded = false;
         Cursor.lockState = CursorLockMode.Locked;
         if (weapon != null)
         {
-            Instantiate(weapon, transform.position, transform.rotation, this.transform);
-            weaponFire = weapon.GetComponent<weaponFire>();
+            Instantiate(weapon, weaponPoint.transform.position, transform.rotation, transform);
+            weaponFire = weapon.GetComponent<WeaponController>();
         }
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         fireInput = Input.GetMouseButton(0);
         accelerateInput = Input.GetAxis("Vertical");
@@ -40,14 +49,14 @@ public class playerController : MonoBehaviour
 
         if(fireInput)
         {
-            //weaponFire.Fire();
+            //WeaponController.Fire();
         }
 
         //Check if accelerator is being pressed and if car is moving slower than maxSpeed
         if(accelerateInput != 0 && currentSpeed <= maxSpeed)
         {
             //Increase the car speed towards the pressed direction
-            currentSpeed += accelerateInput * 0.01f;
+            currentSpeed += accelerateInput * 0.1f;
         }
         //Check if accelerator is pressed and if car is moving backwards
         else if(accelerateInput == 0 && currentSpeed < 0)
@@ -106,4 +115,18 @@ public class playerController : MonoBehaviour
             transform.Translate(Vector3.down * Time.deltaTime * fallSpeed, Space.World);
         }
     }
+    
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag.Equals("Enemy") && currentSpeed > 7)
+        {
+            currentSpeed -= currentSpeed / 10;
+        }
+        if(collision.gameObject.tag.Equals("Obstacle") && currentSpeed > 0)
+        {
+            Debug.Log("obstacle");
+            currentSpeed = -1;
+        }
+    }
+    
 }
