@@ -56,11 +56,17 @@ public class WeaponController : MonoBehaviour
                 flameParticle.Stop();
             }
         }
+        else if (playerController.fireInput == false)
+        {
+            hitbox.SetActive(false);
+            shootEffect.Stop();
+        }
         direction = (aimPoint.transform.position - transform.position).normalized;
         Quaternion toRotation = Quaternion.LookRotation(direction);
         transform.rotation = Quaternion.Slerp(transform.rotation, toRotation, 5f * Time.deltaTime);
 
     }
+
     public void Fire()
     {
         if (projectile)
