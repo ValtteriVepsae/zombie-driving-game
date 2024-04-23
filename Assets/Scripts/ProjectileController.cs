@@ -23,11 +23,14 @@ public class ProjectileController: MonoBehaviour
 
     private void FixedUpdate()
     {
-        rb.AddForce(transform.forward * speed, ForceMode.Impulse);
-        if (time >= lifetime)
+        if (rb)
         {
-            Destroy(this.gameObject);
-        }    
+            rb.AddForce(transform.forward * speed, ForceMode.Impulse);
+            if (time >= lifetime)
+            {
+                Destroy(this.gameObject);
+            }
+        }
     }
 
     private void OnDestroy()
@@ -43,6 +46,15 @@ public class ProjectileController: MonoBehaviour
         if (collision.gameObject.tag.Equals("Ground") || collision.gameObject.tag.Equals("Obstacle"))
         {
             Destroy(gameObject);
+        }
+    }
+
+    private void OnTriggerEnter(Collider target)
+    {
+        if (target.gameObject.CompareTag("Enemy"))
+        {
+            target.GetComponentInChildren<ParticleSystem>().Play(true);
+            target.GetComponent<enemyController>().isOnFire = true;
         }
     }
 }

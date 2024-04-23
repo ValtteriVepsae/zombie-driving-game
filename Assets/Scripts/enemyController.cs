@@ -6,6 +6,7 @@ public class enemyController : MonoBehaviour
     [Header("Status")]
     [SerializeField] private bool grounded = false;
     [SerializeField] private float gravity;
+    [SerializeField] public bool isOnFire;
 
     [SerializeField] private float health;
     bool hasCollided = false;
@@ -37,6 +38,7 @@ public class enemyController : MonoBehaviour
         player = GameObject.Find("Car");
         playerController = player.GetComponent<playerController>();
         deadTime = 0;
+        isOnFire = false;
     }
 
     // Update is called once per frame
@@ -117,7 +119,11 @@ public class enemyController : MonoBehaviour
             hasCollided = false;
             isResetting = false;
         }
-
+        if (isOnFire && !isDead)
+        {
+            health -= 0.5f;
+            StartCoroutine("fireStatusTimer");
+        }
     }
 
     void GetHit(Collision col, GameObject obj, float force)
@@ -141,5 +147,12 @@ public class enemyController : MonoBehaviour
         isResetting = true;
         rb.freezeRotation = true;
         rb.isKinematic = true;
+    }
+
+    IEnumerator fireStatusTimer()
+    {
+        yield return new WaitForSeconds(5);
+        isOnFire = false;
+        GetComponentInChildren<ParticleSystem>().Stop();
     }
 }
