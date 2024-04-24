@@ -65,7 +65,7 @@ public class enemyController : MonoBehaviour
     {
         if (_target.gameObject.tag.Equals("Player"))
         {
-            if (_target.gameObject != null && player.GetComponent<Rigidbody>())
+            if (_target.gameObject != null)
             {
                 GetHit(_target, _target.gameObject, playerController.currentSpeed*player.GetComponent<Rigidbody>().mass);
             }
