@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class playerController : MonoBehaviour
 {
+    public static playerController instance;
+
     [Header("Settings")]
     [SerializeField] private float maxSpeed;
     [SerializeField] private float maxTurn;
@@ -30,6 +32,7 @@ public class playerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        instance = this;
         weaponPoint = GameObject.Find("WeaponPoint");
         grounded = false;
         Cursor.lockState = CursorLockMode.Locked;

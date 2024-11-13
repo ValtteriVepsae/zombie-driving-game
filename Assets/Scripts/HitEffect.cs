@@ -21,7 +21,6 @@ public class HitEffect : MonoBehaviour
         if (time > lifetime) 
         {
             particle.Stop(true);
-            //Destroy(this.gameObject);
         }
     }
 }

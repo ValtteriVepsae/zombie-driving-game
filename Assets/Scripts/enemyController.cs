@@ -19,7 +19,7 @@ public class enemyController : MonoBehaviour
     [Header("Effects")]
     [SerializeField] Material aliveMaterial;
     [SerializeField] Material deadMaterial;
-    [SerializeField] private Rigidbody rb;
+    private Rigidbody rb;
     [SerializeField] private ParticleSystem hitEffect;
     [SerializeField] private ParticleSystem deathEffect;
     private GameObject player;
@@ -36,7 +36,8 @@ public class enemyController : MonoBehaviour
     void Start()
     {
         player = GameObject.Find("Car");
-        playerController = player.GetComponent<playerController>();
+        playerController = playerController.instance;
+        rb = GetComponent<Rigidbody>();
         deadTime = 0;
         isOnFire = false;
     }
@@ -44,22 +45,7 @@ public class enemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /*if (hasCollided == false)
-        {
-            if (Physics.Raycast(transform.position, Vector3.down, 0.1f))
-            {
-                //If yes, enemy won't fall
-                grounded = true;
-                fallSpeed = 0;
-            }
-            else
-            {
-                //If no, enemy starts to fall with an increasing speed
-                grounded = false;
-                fallSpeed += gravity;
-                transform.Translate(Vector3.down * Time.deltaTime * fallSpeed, Space.World);
-            }
-        }*/
+
     }
     void OnCollisionEnter(Collision _target)
     {

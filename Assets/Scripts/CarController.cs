@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class CarController : MonoBehaviour
 {
+    public static CarController instance;
+
     [SerializeField] GameObject tire_fl;
     [SerializeField] GameObject tire_fr;
     [SerializeField] GameObject tire_bl;
@@ -27,12 +29,7 @@ public class CarController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        /*
-        tire_fl_col = tire_fl.GetComponentInChildren<WheelCollider>();
-        tire_fr_col = tire_fr.GetComponentInChildren<WheelCollider>();
-        tire_bl_col = tire_bl.GetComponentInChildren<WheelCollider>();
-        tire_br_col = tire_br.GetComponentInChildren<WheelCollider>();
-        */
+        instance = this;
         tire_fl_col.brakeTorque = 0;
         tire_fr_col.brakeTorque = 0;
         tire_br_col.brakeTorque = 0;
@@ -70,10 +67,7 @@ public class CarController : MonoBehaviour
             tire_fl_col.steerAngle = steerInput *10;
             tire_fr_col.steerAngle = steerInput * 10;
 
-        }
-        
-        
-       
+        }      
     }
     void Update()
     {
