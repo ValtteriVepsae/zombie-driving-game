@@ -260,7 +260,7 @@ MonoBehaviour:
   damageMin: 50
   damageMax: 60
   knockback: 10
-  lifetime: 30
+  lifetime: 5
   trail: {fileID: 377628902893615070}
 --- !u!54 &8542382528512668396
 Rigidbody:

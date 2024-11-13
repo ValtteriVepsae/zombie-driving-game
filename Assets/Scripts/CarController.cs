@@ -14,6 +14,10 @@ public class CarController : MonoBehaviour
     [SerializeField] WheelCollider tire_fr_col;
     [SerializeField] WheelCollider tire_bl_col;
     [SerializeField] WheelCollider tire_br_col;
+    [SerializeField] GameObject weapon;
+    [SerializeField] GameObject weaponSpawnPoint;
+    private WeaponController weaponFire;
+    public bool fireInput;
 
 
     public float accelerateInput;
@@ -34,13 +38,18 @@ public class CarController : MonoBehaviour
         tire_br_col.brakeTorque = 0;
         tire_bl_col.brakeTorque = 0;
         reverseGear = -1;
+
+        if (weapon != null)
+        {
+            Instantiate(weapon, weaponSpawnPoint.transform.position, transform.rotation, transform);
+            weaponFire = weapon.GetComponent<WeaponController>();
+        }
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        accelerateInput = Input.GetAxis("Vertical");
-        steerInput = Input.GetAxis("Horizontal");
+
         if (accelerateInput > 0)
         {
             tire_fl_col.motorTorque = accelerateInput * Time.deltaTime * 100000 * -reverseGear;
@@ -63,7 +72,16 @@ public class CarController : MonoBehaviour
 
         }
         
-        if(Input.GetKeyDown(KeyCode.R) && reverseGear == -1)
+        
+       
+    }
+    void Update()
+    {
+        fireInput = Input.GetMouseButton(0);
+        accelerateInput = Input.GetAxis("Vertical");
+        steerInput = Input.GetAxis("Horizontal");
+
+        if (Input.GetKeyDown(KeyCode.R) && reverseGear == -1)
         {
             reverseGear = 1;
         }
@@ -71,6 +89,5 @@ public class CarController : MonoBehaviour
         {
             reverseGear = -1;
         }
-        
-}
     }
+}

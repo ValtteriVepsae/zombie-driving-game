@@ -11,7 +11,6 @@ public class ProjectileController: MonoBehaviour
     [SerializeField] public float knockback;
     [SerializeField] float lifetime;
     private Rigidbody rb;
-    private float time;
     [SerializeField] GameObject trail;
 
     // Start is called before the first frame update
@@ -19,6 +18,7 @@ public class ProjectileController: MonoBehaviour
     {
         rb = gameObject.GetComponent<Rigidbody>();
         knockback = 20;
+        StartCoroutine(Timer());
     }
 
     private void FixedUpdate()
@@ -26,10 +26,6 @@ public class ProjectileController: MonoBehaviour
         if (rb)
         {
             rb.AddForce(transform.forward * speed, ForceMode.Impulse);
-            if (time >= lifetime)
-            {
-                Destroy(this.gameObject);
-            }
         }
     }
 
@@ -56,5 +52,10 @@ public class ProjectileController: MonoBehaviour
             target.GetComponentInChildren<ParticleSystem>().Play(true);
             target.GetComponent<enemyController>().isOnFire = true;
         }
+    }
+    public IEnumerator Timer()
+    {
+        yield return new WaitForSeconds(lifetime);
+        Destroy(gameObject);
     }
 }

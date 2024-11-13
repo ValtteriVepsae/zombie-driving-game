@@ -6,7 +6,7 @@ using UnityEngine;
 public class WeaponController : MonoBehaviour
 {
     private GameObject player;
-    private playerController playerController;
+    private CarController carController;
     [SerializeField] GameObject projectile;
     private GameObject shootPoint;
     [SerializeField] float interval;
@@ -21,12 +21,15 @@ public class WeaponController : MonoBehaviour
 
     public void Start()
     {
-        player = GameObject.Find("Car");
-        playerController = player.GetComponent<playerController>();
+        player = GameObject.Find("Celica");
+        carController = player.GetComponent<CarController>();
         aimPoint = GameObject.Find("AimPoint");
         shootPoint = GameObject.Find("shootPoint");
         flameParticle = GetComponentInChildren<ParticleSystem>();
-        hitbox.SetActive(false);
+        if (hitbox)
+        {
+            hitbox.SetActive(false);
+        }
     }
 
     public void FixedUpdate()
@@ -37,7 +40,7 @@ public class WeaponController : MonoBehaviour
             {
                 step++;
             }
-            if (step >= interval && playerController.fireInput == true)
+            if (step >= interval && carController.fireInput == true)
             {
                 Fire();
                 step = 0;
@@ -45,7 +48,7 @@ public class WeaponController : MonoBehaviour
         }
         if(hitbox)
         {
-            if(playerController.fireInput)
+            if(carController.fireInput)
             {
                 hitbox.SetActive(true);
                 flameParticle.Play();
@@ -56,11 +59,12 @@ public class WeaponController : MonoBehaviour
                 flameParticle.Stop();
             }
         }
-        else if (playerController.fireInput == false)
+        else if (carController.fireInput == false)
         {
-            hitbox.SetActive(false);
+            //hitbox.SetActive(false);
             shootEffect.Stop();
         }
+        
         direction = (aimPoint.transform.position - transform.position).normalized;
         Quaternion toRotation = Quaternion.LookRotation(direction);
         transform.rotation = Quaternion.Slerp(transform.rotation, toRotation, 5f * Time.deltaTime);
