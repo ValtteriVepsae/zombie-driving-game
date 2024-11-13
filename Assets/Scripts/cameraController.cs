@@ -14,8 +14,8 @@ public class cameraController : MonoBehaviour
     private float mouseX;
     private float mouseY;
     private bool zoomInput;
-    private GameObject pivotPoint;
-    private GameObject aimPoint;
+    [SerializeField] private GameObject pivotPoint;
+    [SerializeField] private GameObject aimPoint;
     private RaycastHit hit;
     private Vector3 aimPointOffset;
 
@@ -24,8 +24,10 @@ public class cameraController : MonoBehaviour
     void Start()
     {
         GetComponent<GameManager>();
-        aimPoint = GameObject.FindGameObjectWithTag("AimPoint");
-        pivotPoint = GameObject.Find("Pivotpoint");
+        //aimPoint = GameObject.FindGameObjectWithTag("AimPoint");
+        //pivotPoint = GameObject.Find("Pivotpoint");
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void Update()
